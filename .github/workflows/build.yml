@@ -1,0 +1,24 @@
+name: Build Mod
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract source zip
+        run: unzip adaptive-wheel-fabric-26.3-source.zip
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.10'
+      - name: Build mod
+        working-directory: adaptive_wheel
+        run: gradle build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adaptive-wheel-mod
+          path: adaptive_wheel/build/libs/*.jar
+          
